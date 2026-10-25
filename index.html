@@ -743,19 +743,22 @@
         </p>
       </div>
 
-      <!-- 5. TWO SYMMETRICAL VENUE & DATE ICONS (قاعة مذهلة & التاريخ) -->
+      <!-- 5. DATE AND VENUE LOCATION -->
       <div class="w-full flex items-start justify-center gap-12 sm:gap-14 py-4 px-6">
         
-        <!-- Right Item in RTL (Appears on Right): Floral / Chandelier Motif + Hijri & Gregorian Dates -->
-        <div class="flex flex-col items-center text-center group cursor-pointer" onclick="openLocationModal()">
+        <!-- Right Item in RTL (Appears on Right): Date -->
+        <div class="flex flex-col items-center text-center group">
           <div class="w-8 h-8 flex items-center justify-center text-[#7d746a] mb-1 transition-transform group-hover:scale-110">
-            <!-- Ornate Vintage Floral Crest Icon matching right icon in Screenshot 2 -->
-            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M16 4 C14 9 11 11 16 16 C21 11 18 9 16 4 Z" fill="currentColor" fill-opacity="0.2" />
-              <path d="M16 16 C11 13 7 15 6 19 C9 21 13 19 16 16 Z" fill="currentColor" fill-opacity="0.2" />
-              <path d="M16 16 C21 13 25 15 26 19 C23 21 19 19 16 16 Z" fill="currentColor" fill-opacity="0.2" />
-              <path d="M9 22 C13 22 19 22 23 22" stroke-linecap="round" />
-              <circle cx="16" cy="25" r="1.2" fill="currentColor" />
+            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="8" width="20" height="18" rx="2" />
+              <line x1="6" y1="13" x2="26" y2="13" />
+              <line x1="11" y1="5" x2="11" y2="10" />
+              <line x1="21" y1="5" x2="21" y2="10" />
+              <circle cx="12" cy="18" r="1" fill="currentColor" />
+              <circle cx="16" cy="18" r="1" fill="currentColor" />
+              <circle cx="20" cy="18" r="1" fill="currentColor" />
+              <circle cx="12" cy="22" r="1" fill="currentColor" />
+              <circle cx="16" cy="22" r="1" fill="currentColor" />
             </svg>
           </div>
           <span id="iconRightLabelHijri" class="font-arabic-royal text-[#7d746a] text-[11.5px] sm:text-[12px] leading-tight">
@@ -766,24 +769,16 @@
           </span>
         </div>
 
-        <!-- Left Item in RTL (Appears on Left): Calendar / Hall Icon + قاعة مذهلة -->
+        <!-- Left Item in RTL (Appears on Left): Venue location -->
         <div class="flex flex-col items-center text-center group cursor-pointer" onclick="openLocationModal()">
           <div class="w-8 h-8 flex items-center justify-center text-[#7d746a] mb-1 transition-transform group-hover:scale-110">
-            <!-- Vintage Calendar / Hall Arch Icon matching left icon in Screenshot 2 -->
-            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6">
-              <rect x="6" y="8" width="20" height="16" rx="2" fill="currentColor" fill-opacity="0.12" />
-              <line x1="6" y1="13" x2="26" y2="13" />
-              <line x1="11" y1="5" x2="11" y2="9" stroke-linecap="round" />
-              <line x1="21" y1="5" x2="21" y2="9" stroke-linecap="round" />
-              <circle cx="12" cy="17" r="1" fill="currentColor" />
-              <circle cx="16" cy="17" r="1" fill="currentColor" />
-              <circle cx="20" cy="17" r="1" fill="currentColor" />
-              <circle cx="12" cy="21" r="1" fill="currentColor" />
-              <circle cx="16" cy="21" r="1" fill="currentColor" />
+            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 28s9-8.2 9-16a9 9 0 1 0-18 0c0 7.8 9 16 9 16Z" />
+              <circle cx="16" cy="12" r="3" />
             </svg>
           </div>
           <span id="venueNameText" class="font-arabic-royal text-[#7d746a] text-[12px] sm:text-[12.5px] border-b border-transparent group-hover:border-[#7d746a]">
-            قاعة مذهلة
+            موقع قاعة مذهلة
           </span>
         </div>
 
@@ -850,7 +845,7 @@
         <h4 id="modalVenueTitle" class="font-arabic-royal text-xl font-bold mb-1">قاعة مذهلة</h4>
         <p id="modalDateSubtitle" class="text-sm text-[#7d7368] mb-4">الأحد، 22 نوفمبر 2026م | 12 جمادى الآخرة 1448هـ</p>
         <a id="venueMapLink"
-           href="https://maps.google.com/?q=قاعة+مذهلة"
+           href="https://maps.app.goo.gl/6J64nDxmeFMMqFgZ7?g_st=iw"
            target="_blank"
            rel="noopener noreferrer"
            class="block w-full py-2.5 px-4 rounded-xl bg-[#6a6056] hover:bg-[#554c43] text-white text-sm font-arabic-royal transition">
@@ -1575,9 +1570,8 @@
       document.getElementById('insideNamesEn').textContent = namesEn;
       document.getElementById('envNamesAr').textContent = namesAr;
       document.getElementById('envDateAr').textContent = dateAr;
-      document.getElementById('venueNameText').textContent = venue;
+      document.getElementById('venueNameText').textContent = 'موقع ' + venue;
       document.getElementById('modalVenueTitle').textContent = venue;
-      document.getElementById('venueMapLink').href = 'https://maps.google.com/?q=' + encodeURIComponent(venue);
     }
 
     function uploadCustomPhoto(event, targetImgId) {
