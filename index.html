@@ -1517,7 +1517,8 @@
     function startAudio(fromUserGesture = false) {
       const customAudio = document.getElementById('customAudioPlayer');
       if (useCustomMp3 && customAudio.src) {
-        if (isPlaying || (audioStartPending && !fromUserGesture)) return;
+        if (!fromUserGesture && (!customAudio.paused || audioStartPending)) return;
+        if (!customAudio.paused && !customAudio.ended) return;
 
         audioStartPending = true;
         const attemptId = ++audioAttemptId;
@@ -1607,24 +1608,20 @@
       }
     }
 
-    // Keep retrying after blocked autoplay until a user gesture starts the audio.
-    function unlockAudioOnFirstInteraction(event) {
-      const now = Date.now();
-      if (event && now - lastAudioGestureAt < 500) return;
-      lastAudioGestureAt = now;
-
+    // Retry audio playback directly from the gesture event so mobile browsers allow it.
+    function unlockAudioOnFirstInteraction() {
       if (isPlaying && audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume().then(() => {
           playWarmPianoNote(weddingNotes[noteIndex % weddingNotes.length]);
           noteIndex++;
         }).catch(() => {});
       }
-      if (!isPlaying) startAudio(true);
+      const customAudio = document.getElementById('customAudioPlayer');
+      if (customAudio.paused || !isPlaying) startAudio(true);
     }
 
-    const audioUnlockEvents = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'];
+    const audioUnlockEvents = ['touchend', 'click', 'keydown'];
     const audioUnlockSurface = document.getElementById('introVideoScreen');
-    let lastAudioGestureAt = 0;
 
     function removeAudioUnlockListeners() {
       audioUnlockEvents.forEach(eventName => {
