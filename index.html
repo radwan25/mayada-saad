@@ -1528,6 +1528,7 @@
             audioStartPending = false;
             isPlaying = true;
             document.getElementById('audioStartHint').classList.remove('is-visible');
+            removeAudioUnlockListeners();
             updateAudioUI();
           }).catch(error => {
             if (attemptId !== audioAttemptId) return;
@@ -1541,6 +1542,7 @@
           audioStartPending = false;
           isPlaying = true;
           document.getElementById('audioStartHint').classList.remove('is-visible');
+          removeAudioUnlockListeners();
           updateAudioUI();
         }
         return;
@@ -1605,8 +1607,12 @@
       }
     }
 
-    // Unlock and ensure audio is playing on the very first touch or click anywhere
-    function unlockAudioOnFirstInteraction() {
+    // Keep retrying after blocked autoplay until a user gesture starts the audio.
+    function unlockAudioOnFirstInteraction(event) {
+      const now = Date.now();
+      if (event && now - lastAudioGestureAt < 500) return;
+      lastAudioGestureAt = now;
+
       if (isPlaying && audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume().then(() => {
           playWarmPianoNote(weddingNotes[noteIndex % weddingNotes.length]);
@@ -1614,12 +1620,27 @@
         }).catch(() => {});
       }
       if (!isPlaying) startAudio(true);
-      document.removeEventListener('pointerdown', unlockAudioOnFirstInteraction);
-      document.removeEventListener('keydown', unlockAudioOnFirstInteraction);
     }
 
-    ['pointerdown', 'keydown'].forEach(evt => {
-      document.addEventListener(evt, unlockAudioOnFirstInteraction, { passive: true, once: true });
+    const audioUnlockEvents = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'];
+    const audioUnlockSurface = document.getElementById('introVideoScreen');
+    let lastAudioGestureAt = 0;
+
+    function removeAudioUnlockListeners() {
+      audioUnlockEvents.forEach(eventName => {
+        document.removeEventListener(eventName, unlockAudioOnFirstInteraction, true);
+        audioUnlockSurface.removeEventListener(eventName, unlockAudioOnFirstInteraction);
+      });
+    }
+
+    audioUnlockEvents.forEach(eventName => {
+      document.addEventListener(eventName, unlockAudioOnFirstInteraction, {
+        capture: true,
+        passive: true
+      });
+      audioUnlockSurface.addEventListener(eventName, unlockAudioOnFirstInteraction, {
+        passive: true
+      });
     });
 
     /* ---------------------------------------------------------------------
