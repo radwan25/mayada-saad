@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Mayada & Saad | دعوة زفاف ميادة و سعد</title>
+  <title> Saad | دعوة زفاف سعد</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com" defer></script>
@@ -11,7 +11,7 @@
   <!-- Google Fonts for Exact Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Scheherazade+New:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Rakkas&family=Scheherazade+New:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>
     :root {
@@ -43,6 +43,94 @@
       align-items: flex-start;
     }
 
+    #pageLoader {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #1c1917;
+      color: #e5d2ad;
+      font-size: 19px;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    #pageLoader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .page-loader-spinner {
+      width: 42px;
+      height: 42px;
+      border: 3px solid rgba(197, 168, 128, 0.28);
+      border-top-color: var(--warm-gold);
+      border-radius: 50%;
+      animation: page-loader-spin 0.85s linear infinite;
+    }
+
+    @keyframes page-loader-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #introVideoScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #100e0c;
+      opacity: 0;
+      transition: opacity 0.85s ease;
+    }
+
+    #introVideoScreen.is-hidden {
+      display: none;
+    }
+
+    #introVideoScreen.is-visible {
+      opacity: 1;
+    }
+
+    #introVideoScreen.is-exiting {
+      opacity: 0;
+    }
+
+    #introVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #100e0c;
+    }
+
+    #audioStartHint {
+      position: absolute;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      z-index: 1;
+      display: none;
+      color: #f5ead7;
+      font-size: 13px;
+      text-shadow: 0 1px 5px #000;
+      pointer-events: none;
+    }
+
+    #audioStartHint.is-visible {
+      display: block;
+    }
+
+    #pageLoaderMessage {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
     /* English Script Typography */
     .font-script {
       font-family: 'Great Vibes', 'Alex Brush', cursive;
@@ -53,6 +141,10 @@
     /* Arabic Calligraphic Typography */
     .font-arabic-royal {
       font-family: 'Amiri', 'Scheherazade New', serif;
+    }
+
+    .font-arabic-calligraphy {
+      font-family: 'Aref Ruqaa', 'Scheherazade New', serif;
     }
 
     /* Countdown Serif Typography */
@@ -260,18 +352,91 @@
     }
 
     #poemContainer {
-      color: var(--ink-light);
-      font-size: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2em;
+      color: #8b6b37;
+      font-family: 'Rakkas', 'Aref Ruqaa', 'Scheherazade New', serif;
+      font-size: clamp(13px, 3.9vw, 19px);
+      font-weight: 700;
       line-height: 2;
+      white-space: nowrap;
+      max-width: 100%;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 5px rgba(139, 107, 55, 0.18);
     }
 
-    #poemContainer p + p {
-      margin-top: 0.15rem;
+    #coupletContainer {
+      color: var(--ink-main);
+      font-size: clamp(15px, 4.2vw, 18px);
+      line-height: 1.65;
+    }
+
+    #coupletContainer p {
+      margin: 0;
+    }
+
+    .host-name-frame {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0.25rem auto 0.45rem;
+      padding: 0.25rem 1.25rem;
+      border: 1px solid rgba(197, 168, 128, 0.8);
+      outline: 1px solid rgba(197, 168, 128, 0.35);
+      outline-offset: 3px;
+      color: var(--royal-blue);
+      background: rgba(255, 253, 248, 0.42);
+      font-size: clamp(21px, 5.6vw, 26px);
+      text-shadow: 0 1px 0 rgba(197, 168, 128, 0.35);
+    }
+
+    .host-name-frame::before,
+    .host-name-frame::after {
+      position: absolute;
+      top: 50%;
+      color: var(--warm-gold);
+      content: "❧";
+      font-size: 15px;
+      transform: translateY(-50%);
+    }
+
+    .host-name-frame::before {
+      right: -0.65rem;
+    }
+
+    .host-name-frame::after {
+      left: -0.65rem;
+      transform: translateY(-50%) scaleX(-1);
+    }
+
+    #welcomeWord {
+      color: #8b6b37;
+      font-size: 27px;
+    }
+
+    #closingPhrase {
+      color: #8b6b37;
+      font-size: clamp(19px, 5.2vw, 23px);
+      font-family: 'Rakkas', 'Aref Ruqaa', 'Scheherazade New', serif;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75), 0 1px 5px rgba(139, 107, 55, 0.16);
+    }
+
+    #poemContainer::before,
+    #poemContainer::after {
+      color: var(--warm-gold);
+      content: "۞";
+      font-size: 1.15em;
+      flex: 0 0 auto;
+    }
+
+    #poemContainer p {
+      margin: 0;
     }
 
     #mainZaffaTitle {
       color: var(--royal-blue);
-      font-size: 29px;
+      font-size: 31px;
       text-shadow: 0 1px 0 rgba(197, 168, 128, 0.42);
     }
 
@@ -323,22 +488,27 @@
       }
 
       #poemContainer {
-        font-size: 18px;
+        font-size: clamp(11px, 3.7vw, 16px);
       }
     }
 
     @media (max-width: 360px) {
-      #poemContainer {
-        font-size: 15px;
-      }
-
       #mainZaffaTitle {
-        font-size: 25px;
+        font-size: 27px;
       }
     }
   </style>
 </head>
 <body>
+  <div id="pageLoader" role="status" aria-live="polite">
+    <span class="page-loader-spinner" aria-hidden="true"></span>
+    <span id="pageLoaderMessage">انتظر، جارٍ تحميل الدعوة...</span>
+  </div>
+
+  <div id="introVideoScreen" class="is-hidden">
+    <video id="introVideo" src="Saad/vid.mp4" muted playsinline preload="auto"></video>
+    <span id="audioStartHint">الموسيقى تبدأ عند أول لمسة للشاشة</span>
+  </div>
 
   <!-- Desktop Ambient Backdrop -->
   <div class="fixed inset-0 pointer-events-none hidden md:block z-0"
@@ -370,13 +540,7 @@
       <!-- Centerpiece: Names + Closed Ornate Embossed Envelope + Prompt -->
       <div class="relative z-10 w-full flex flex-col items-center my-auto">
         
-        <!-- English Script Names Above Envelope -->
-        <h1 id="coverNamesEn"
-             dir="ltr"
-            class="font-script text-white text-[36px] sm:text-[40px] leading-none mb-2 tracking-wide select-none text-center"
-            style="text-shadow: 0 2px 12px rgba(45, 36, 28, 0.45), 0 0 25px rgba(255, 250, 242, 0.25);">
-          Mayada &amp; Saad
-        </h1>
+
 
         <!-- Closed Embossed Royal Envelope (Click to Open) -->
         <div id="closedEnvelopeBtn"
@@ -559,14 +723,7 @@
         <div class="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/20 pointer-events-none"></div>
 
         <!-- English Script Names at Very Top -->
-        <div class="absolute top-4 inset-x-0 text-center z-10 pointer-events-none">
-          <h2 id="insideNamesEn"
-              dir="ltr"
-              class="font-script text-white/95 text-[35px] sm:text-[38px] leading-tight"
-              style="text-shadow: 0 2px 12px rgba(0,0,0,0.65);">
-            Mayada &amp; Saad
-          </h2>
-        </div>
+
 
         <!-- Subtle Back Button (Return to Closed Envelope) -->
         <button onclick="closeInvitation()"
@@ -708,66 +865,46 @@
             </svg>
 
             <!-- D. Arabic Text Printed on the Lower Front Pocket of the Envelope -->
-            <div class="absolute bottom-[25px] inset-x-0 z-30 flex flex-col items-center text-center pointer-events-none px-4">
-              <p id="envNamesAr" class="font-arabic-royal text-[#726a60] text-[15px] sm:text-[16px] leading-tight tracking-wide">
-                ميادة &amp; سعد
-              </p>
-              <p id="envDateAr" class="font-arabic-royal text-[#857c72] text-[10.5px] sm:text-[11px] mt-0.5 tracking-normal">
-                الثاني والعشرون من شهر نوفمبر لعام 2026م
-              </p>
-            </div>
+
 
           </div>
         </div>
       </div>
 
-      <!-- 3. POETIC INVITATION SECTION (CLEAN & UNOBSTRUCTED WITHOUT PLAY BUTTON OVERLAY) -->
-      <div class="relative w-full flex flex-col items-center px-6 pt-5 pb-3 text-center">
-        <div id="poemContainer" class="space-y-1.5 text-[#7e746a] text-[15.5px] sm:text-[16.5px] font-arabic-royal leading-relaxed select-none">
-          <p id="poemLine1">إلى كل من له في نفسي مكانة عزيزة</p>
-          <p id="poemLine2">اليوم أقاسمكم سروري وجميل شعوري</p>
-          <p id="poemLine3">بكل الود والحب أدعوكم لحضور</p>
+      <!-- 3. CALLIGRAPHIC BLESSING AND INVITATION VERSES -->
+      <div class="relative w-full flex flex-col items-center px-4 pt-5 pb-2 text-center">
+        <div id="poemContainer" class="font-arabic-royal leading-relaxed select-none">
+          <p id="poemLine1">بَارَكَ اللَّهُ لَهُمَا وَبَارَكَ عَلَيْهِمَا وَجَمَعَ بَيْنَهُمَا فِي خَيْرٍ</p>
+        </div>
+        <div id="coupletContainer" class="font-arabic-royal mt-1 select-none">
+          <p>لحظات الفرح اختارت من العمر موعداً</p>
+          <p>في ليلة زاهية يضيوي الفرح بعالي سماها</p>
         </div>
       </div>
 
-      <!-- 4. STRETCHED CALLIGRAPHIC HEADING: حفل زفــــــــــــافي -->
+      <!-- 4. INVITATION HOST AND GROOM -->
       <div class="w-full text-center px-6 pt-2 pb-1">
+        <p id="welcomeWord" class="font-arabic-calligraphy leading-tight select-none">يتشرف</p>
+        <div class="host-name-frame font-arabic-royal select-none">
+          عبد الشكور عبد العزيز
+        </div>
+        <p class="font-arabic-royal text-[#8d8479] text-[15px] sm:text-[16px] mt-1">
+          بدعوتكم لحضور زفاف
+        </p>
         <h3 id="mainZaffaTitle"
-            class="font-arabic-royal text-[#746b61] text-[25px] sm:text-[27px] font-normal tracking-normal select-none">
-          حفل زفـــــــــــــــــــــافي
+            class="font-arabic-calligraphy text-[#746b61] text-[32px] sm:text-[36px] font-bold tracking-normal select-none">
+          سعد
         </h3>
 
         <p id="subDayLine"
-           class="font-arabic-royal text-[#8d8479] text-[13.5px] sm:text-[14px] mt-3 tracking-wide">
-          وذلك بمشيئة الله تعالـــى يـــوم الأحـــد
+           class="font-arabic-royal text-[#8d8479] text-[15px] sm:text-[16px] mt-2 tracking-wide">
+          وذلك بمشيئة الله يوم الأحد ١٢ / ٦ / ١٤٤٨ هـ
         </p>
       </div>
 
       <!-- 5. DATE AND VENUE LOCATION -->
       <div class="w-full flex items-start justify-center gap-12 sm:gap-14 py-4 px-6">
         
-        <!-- Right Item in RTL (Appears on Right): Date -->
-        <div class="flex flex-col items-center text-center group">
-          <div class="w-8 h-8 flex items-center justify-center text-[#7d746a] mb-1 transition-transform group-hover:scale-110">
-            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="6" y="8" width="20" height="18" rx="2" />
-              <line x1="6" y1="13" x2="26" y2="13" />
-              <line x1="11" y1="5" x2="11" y2="10" />
-              <line x1="21" y1="5" x2="21" y2="10" />
-              <circle cx="12" cy="18" r="1" fill="currentColor" />
-              <circle cx="16" cy="18" r="1" fill="currentColor" />
-              <circle cx="20" cy="18" r="1" fill="currentColor" />
-              <circle cx="12" cy="22" r="1" fill="currentColor" />
-              <circle cx="16" cy="22" r="1" fill="currentColor" />
-            </svg>
-          </div>
-          <span id="iconRightLabelHijri" class="font-arabic-royal text-[#7d746a] text-[11.5px] sm:text-[12px] leading-tight">
-            1448/06/12 هـ
-          </span>
-          <span id="iconRightLabelGreg" class="font-arabic-royal text-[#8a8075] text-[11px] sm:text-[11.5px] leading-tight mt-0.5">
-            2026/11/22 م
-          </span>
-        </div>
 
         <!-- Left Item in RTL (Appears on Left): Venue location -->
         <div class="flex flex-col items-center text-center group cursor-pointer" onclick="openLocationModal()">
@@ -820,6 +957,10 @@
         </div>
       </div>
 
+      <div id="closingPhrase" class="font-arabic-calligraphy w-full text-center px-4 pb-4 select-none">
+        ❧ وبحضوركم يتم لنا الفرح والسرور ❧
+      </div>
+
       <!-- 7. BOTTOM MONOCHROME WHITE ROSE BOUQUET & FLOWING VEIL BANNER -->
       <div class="relative w-full h-[185px] overflow-hidden bg-[#3a3836] mt-auto">
         <!-- Procedural High-Realism Monochrome Bridal Bouquet & Veil Drapery Canvas -->
@@ -869,12 +1010,6 @@
           
           <!-- Names & Date -->
           <div class="grid grid-cols-1 gap-3">
-            <div>
-              <label class="block text-xs text-[#7a7066] mb-1">الأسماء بالإنجليزية (أعلى الدعوة)</label>
-              <input id="inputNamesEn" type="text" dir="ltr" value="Mayada & Saad"
-                     oninput="applyCustomizations()"
-                     class="w-full px-3 py-2 rounded-lg bg-white/80 border border-[#cfc6b6] text-left font-serif text-sm focus:outline-none focus:border-[#7a7066]" />
-            </div>
             <div>
               <label class="block text-xs text-[#7a7066] mb-1">الأسماء بالعربية (على الظرف)</label>
               <input id="inputNamesAr" type="text" value="ميادة & سعد"
@@ -945,7 +1080,7 @@
     </div>
 
     <!-- Hidden Audio Element for Custom Uploaded MP3 -->
-    <audio id="customAudioPlayer" src="Saad/oo.mp3" loop class="hidden"></audio>
+    <audio id="customAudioPlayer" src="Saad/oo.mp3" autoplay preload="auto" loop class="hidden"></audio>
 
   </main>
 
@@ -1336,6 +1471,8 @@
     --------------------------------------------------------------------- */
     let audioCtx = null;
     let isPlaying = false;
+    let audioStartPending = false;
+    let audioAttemptId = 0;
     let melodyInterval = null;
     let useCustomMp3 = true;
 
@@ -1377,12 +1514,35 @@
       osc2.stop(now + 2.5);
     }
 
-    function startAudio() {
+    function startAudio(fromUserGesture = false) {
       const customAudio = document.getElementById('customAudioPlayer');
       if (useCustomMp3 && customAudio.src) {
-        customAudio.play().catch(() => {});
-        isPlaying = true;
-        updateAudioUI();
+        if (isPlaying || (audioStartPending && !fromUserGesture)) return;
+
+        audioStartPending = true;
+        const attemptId = ++audioAttemptId;
+        const playback = customAudio.play();
+        if (playback) {
+          playback.then(() => {
+            if (attemptId !== audioAttemptId) return;
+            audioStartPending = false;
+            isPlaying = true;
+            document.getElementById('audioStartHint').classList.remove('is-visible');
+            updateAudioUI();
+          }).catch(error => {
+            if (attemptId !== audioAttemptId) return;
+            audioStartPending = false;
+            isPlaying = false;
+            updateAudioUI();
+            document.getElementById('audioStartHint').classList.add('is-visible');
+            if (error.name !== 'NotAllowedError') console.error('Background audio could not play:', error);
+          });
+        } else {
+          audioStartPending = false;
+          isPlaying = true;
+          document.getElementById('audioStartHint').classList.remove('is-visible');
+          updateAudioUI();
+        }
         return;
       }
 
@@ -1447,22 +1607,19 @@
 
     // Unlock and ensure audio is playing on the very first touch or click anywhere
     function unlockAudioOnFirstInteraction() {
-      if (!isPlaying) {
-        startAudio();
-      } else if (audioCtx && audioCtx.state === 'suspended') {
+      if (isPlaying && audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume().then(() => {
           playWarmPianoNote(weddingNotes[noteIndex % weddingNotes.length]);
           noteIndex++;
         }).catch(() => {});
       }
-      const customAudio = document.getElementById('customAudioPlayer');
-      if (useCustomMp3 && customAudio.paused) {
-        customAudio.play().catch(() => {});
-      }
+      if (!isPlaying) startAudio(true);
+      document.removeEventListener('pointerdown', unlockAudioOnFirstInteraction);
+      document.removeEventListener('keydown', unlockAudioOnFirstInteraction);
     }
 
-    ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(evt => {
-      document.addEventListener(evt, unlockAudioOnFirstInteraction, { passive: true });
+    ['pointerdown', 'keydown'].forEach(evt => {
+      document.addEventListener(evt, unlockAudioOnFirstInteraction, { passive: true, once: true });
     });
 
     /* ---------------------------------------------------------------------
@@ -1561,7 +1718,6 @@
     }
 
     function applyCustomizations() {
-      const namesEn = document.getElementById('inputNamesEn').value.trim() || 'Mayada & Saad';
       const namesAr = document.getElementById('inputNamesAr').value.trim() || 'ميادة & سعد';
       const dateAr = document.getElementById('inputDateAr').value.trim() || 'الثاني والعشرون من شهر نوفمبر لعام 2026م';
       const venue = document.getElementById('inputVenue').value.trim() || 'قاعة مذهلة';
@@ -1620,6 +1776,79 @@
       updateCountdownDisplay();
       setInterval(updateCountdownDisplay, 1000);
       startAudio();
+    });
+
+    const pageLoader = document.getElementById('pageLoader');
+    const introVideo = document.getElementById('introVideo');
+    const introVideoScreen = document.getElementById('introVideoScreen');
+
+    function waitForMediaReady(media, readyState) {
+      if (media.readyState >= readyState) return Promise.resolve();
+
+      return new Promise((resolve, reject) => {
+        const cleanup = () => {
+          media.removeEventListener('canplay', onReady);
+          media.removeEventListener('loadeddata', onReady);
+          media.removeEventListener('error', onError);
+        };
+        const onReady = () => {
+          if (media.readyState >= readyState) {
+            cleanup();
+            resolve();
+          }
+        };
+        const onError = () => {
+          cleanup();
+          reject(new Error(`Unable to load media: ${media.currentSrc || media.src}`));
+        };
+
+        media.addEventListener('canplay', onReady);
+        media.addEventListener('loadeddata', onReady);
+        media.addEventListener('error', onError, { once: true });
+        onReady();
+      });
+    }
+
+    function finishIntroVideo() {
+      if (introVideoScreen.classList.contains('is-hidden') ||
+          introVideoScreen.classList.contains('is-exiting')) {
+        return;
+      }
+
+      introVideo.pause();
+      introVideoScreen.classList.remove('is-visible');
+      introVideoScreen.classList.add('is-exiting');
+
+      const hideScreen = () => introVideoScreen.classList.add('is-hidden');
+      introVideoScreen.addEventListener('transitionend', event => {
+        if (event.target === introVideoScreen && event.propertyName === 'opacity') {
+          hideScreen();
+        }
+      }, { once: true });
+      window.setTimeout(hideScreen, 1000);
+    }
+
+    introVideo.addEventListener('ended', finishIntroVideo);
+
+    const pageLoadPromise = document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise(resolve => window.addEventListener('load', resolve, { once: true }));
+
+    Promise.all([
+      pageLoadPromise,
+      waitForMediaReady(introVideo, HTMLMediaElement.HAVE_CURRENT_DATA),
+      waitForMediaReady(document.getElementById('customAudioPlayer'), HTMLMediaElement.HAVE_FUTURE_DATA)
+    ]).then(() => {
+      introVideoScreen.classList.remove('is-hidden');
+      requestAnimationFrame(() => introVideoScreen.classList.add('is-visible'));
+      pageLoader.classList.add('is-hidden');
+      introVideo.play().catch(error => {
+        console.error('Intro video could not autoplay:', error);
+      });
+      startAudio();
+    }).catch(error => {
+      document.getElementById('pageLoaderMessage').textContent = 'تعذر تحميل الفيديو أو صوت الخلفية.';
+      console.error('Required invitation media failed to load:', error);
     });
   </script>
 </body>
