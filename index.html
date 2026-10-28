@@ -506,7 +506,7 @@
   </div>
 
   <div id="introVideoScreen" class="is-hidden">
-    <video id="introVideo" src="Saad/vid.mp4" muted playsinline preload="auto"></video>
+    <video id="introVideo" src="Saad/vid.mp4" autoplay muted playsinline webkit-playsinline preload="auto"></video>
     <span id="audioStartHint">الموسيقى تبدأ عند أول لمسة للشاشة</span>
   </div>
 
@@ -1860,8 +1860,7 @@
       const playback = introVideo.play();
       if (playback && typeof playback.catch === 'function') {
         return playback.catch(error => {
-          console.warn('Intro video could not autoplay; showing the invitation instead:', error);
-          finishIntroVideo();
+          console.warn('Safari or the browser blocked intro video autoplay:', error);
         });
       }
     }).catch(error => {
